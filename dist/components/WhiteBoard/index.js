@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.Whiteboard = void 0;
 
 require("core-js/modules/es.json.stringify.js");
 
@@ -15,7 +15,13 @@ require("core-js/modules/web.dom-collections.iterator.js");
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _indexModule = _interopRequireDefault(require("./index.module.scss"));
+
+var _all = require("react-icons/all");
+
 var _fabric = require("fabric");
+
+var _core = require("@material-ui/core");
 
 var _PdfReader = _interopRequireDefault(require("../PdfReader"));
 
@@ -23,27 +29,7 @@ var _fileSaver = require("file-saver");
 
 var _cursors = _interopRequireDefault(require("./cursors"));
 
-var _select = _interopRequireDefault(require("./images/select.svg"));
-
-var _eraser = _interopRequireDefault(require("./images/eraser.svg"));
-
-var _text = _interopRequireDefault(require("./images/text.svg"));
-
-var _rectangle = _interopRequireDefault(require("./images/rectangle.svg"));
-
-var _line = _interopRequireDefault(require("./images/line.svg"));
-
-var _ellipse = _interopRequireDefault(require("./images/ellipse.svg"));
-
-var _triangle = _interopRequireDefault(require("./images/triangle.svg"));
-
-var _pencil = _interopRequireDefault(require("./images/pencil.svg"));
-
-var _delete = _interopRequireDefault(require("./images/delete.svg"));
-
 require("./eraserBrush");
-
-var _indexModule = _interopRequireDefault(require("./index.module.scss"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79,8 +65,8 @@ const modes = {
 
 const initCanvas = () => {
   const canvas = new _fabric.fabric.Canvas('canvas', {
-    height: 600,
-    width: 800
+    height: 700,
+    width: 900
   });
   _fabric.fabric.Object.prototype.transparentCorners = false;
   _fabric.fabric.Object.prototype.cornerStyle = 'circle';
@@ -438,6 +424,7 @@ function draw(canvas) {
 }
 
 const Whiteboard = () => {
+  const [toggle, setToggle] = (0, _react.useState)(false);
   const [canvas, setCanvas] = (0, _react.useState)(null);
   const [brushWidth, setBrushWidth] = (0, _react.useState)(5);
   const [isFill, setIsFill] = (0, _react.useState)(false);
@@ -448,6 +435,7 @@ const Whiteboard = () => {
     currentPage: ''
   });
   const canvasRef = (0, _react.useRef)(null);
+  const colorPelateRef = (0, _react.useRef)(null);
   const uploadImageRef = (0, _react.useRef)(null);
   const uploadPdfRef = (0, _react.useRef)(null);
   (0, _react.useEffect)(() => {
@@ -518,85 +506,113 @@ const Whiteboard = () => {
     setFileReaderInfo(_objectSpread(_objectSpread({}, fileReaderInfo), data));
   }
 
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: _indexModule.default.whiteboard
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: _indexModule.default.toolbar
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.container
+  }, toggle === false ? /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.closeContainer
+  }, /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Open Menu",
+    placement: "bottom"
   }, /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => createLine(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _line.default,
-    alt: "line"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => createRect(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _rectangle.default,
-    alt: "Rectangle"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => createEllipse(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _ellipse.default,
-    alt: "Ellipse"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => createTriangle(canvas, options)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _triangle.default,
-    alt: "Triangle"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => draw(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _pencil.default,
-    alt: "Pencil"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => createText(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _text.default,
-    alt: "Text"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
+    className: "".concat(_indexModule.default.button, " ").concat(_indexModule.default.closeButton),
+    onClick: () => {
+      setToggle(true);
+    }
+  }, /*#__PURE__*/_react.default.createElement(_all.HiChevronDoubleRight, {
+    className: _indexModule.default.icon
+  })))) : /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.openContainer
+  }, /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Close Menu",
+    placement: "right"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: "".concat(_indexModule.default.button, " ").concat(_indexModule.default.openButton),
+    onClick: () => {
+      setToggle(false);
+    }
+  }, /*#__PURE__*/_react.default.createElement(_all.HiChevronDoubleLeft, {
+    className: _indexModule.default.icon
+  }))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Cursor",
+    placement: "right"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button,
     onClick: () => onSelectMode(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _select.default,
-    alt: "Selection mode"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => changeToErasingMode(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _eraser.default,
-    alt: "Eraser"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    type: "button",
-    onClick: () => clearCanvas(canvas)
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: _delete.default,
-    alt: "Delete"
-  })), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("input", {
-    type: "checkbox",
-    name: "fill",
-    id: "fill",
-    checked: isFill,
-    onChange: changeFill
-  }), /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "fill"
-  }, "fill")), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("input", {
+  }, /*#__PURE__*/_react.default.createElement(_all.GiArrowCursor, {
+    className: _indexModule.default.icon
+  }))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Pencil",
+    placement: "right"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button,
+    onClick: () => draw(canvas)
+  }, /*#__PURE__*/_react.default.createElement(_all.MdModeEditOutline, {
+    className: _indexModule.default.icon
+  }))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Pencil Color",
+    placement: "right"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button,
+    onClick: () => colorPelateRef.current.click()
+  }, /*#__PURE__*/_react.default.createElement("input", {
+    ref: colorPelateRef,
+    style: {
+      width: '25px',
+      height: '25px',
+      border: 'none',
+      backgroundColor: 'transparent',
+      borderRadius: '12px'
+    },
     type: "color",
     name: "color",
     id: "color",
     onChange: changeCurrentColor
-  })), /*#__PURE__*/_react.default.createElement("input", {
-    type: "range",
-    min: 1,
-    max: 20,
-    step: 1,
-    value: brushWidth,
-    onChange: changeCurrentWidth
-  }), /*#__PURE__*/_react.default.createElement("div", {
+  }))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Shapes",
+    placement: "bottom"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.uploadDropdown
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button
+  }, /*#__PURE__*/_react.default.createElement(_all.FaShapes, {
+    className: _indexModule.default.icon
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.dropdownContent
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => createLine(canvas)
+  }, "Line"), /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => createRect(canvas)
+  }, "Rectangle"), /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => createEllipse(canvas)
+  }, "Ellipse"), /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => createTriangle(canvas)
+  }, "Triangle")))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Write",
+    placement: "right"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button,
+    onClick: () => createText(canvas)
+  }, /*#__PURE__*/_react.default.createElement(_all.SiWritedotas, {
+    className: _indexModule.default.icon
+  }))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Erase",
+    placement: "bottom"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.uploadDropdown
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.button
+  }, /*#__PURE__*/_react.default.createElement(_all.FaEraser, {
+    className: _indexModule.default.icon
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.dropdownContent
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => changeToErasingMode(canvas)
+  }, "Erase"), /*#__PURE__*/_react.default.createElement("span", {
+    onClick: () => clearCanvas(canvas)
+  }, "Clear All")))), /*#__PURE__*/_react.default.createElement(_core.Tooltip, {
+    title: "Document",
+    placement: "bottom"
+  }, /*#__PURE__*/_react.default.createElement("div", {
     className: _indexModule.default.uploadDropdown
   }, /*#__PURE__*/_react.default.createElement("input", {
     ref: uploadImageRef,
@@ -609,25 +625,16 @@ const Whiteboard = () => {
     type: "file",
     onChange: onFileChange
   }), /*#__PURE__*/_react.default.createElement("button", {
-    className: _indexModule.default.dropdownButton
-  }, "+Upload"), /*#__PURE__*/_react.default.createElement("div", {
-    className: _indexModule.default.dropdownContent
-  }, /*#__PURE__*/_react.default.createElement("span", {
+    className: _indexModule.default.button,
     onClick: () => uploadImageRef.current.click()
-  }, "Image"), /*#__PURE__*/_react.default.createElement("span", {
-    onClick: () => uploadPdfRef.current.click()
-  }, "PDF"))), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: () => canvasToJson(canvas)
-  }, "To Json"), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: onSaveCanvasAsImage
-  }, "Save as image")), /*#__PURE__*/_react.default.createElement("canvas", {
+  }, /*#__PURE__*/_react.default.createElement(_all.IoDocument, {
+    className: _indexModule.default.icon
+  })))))), /*#__PURE__*/_react.default.createElement("div", {
+    className: _indexModule.default.whiteboard
+  }, /*#__PURE__*/_react.default.createElement("canvas", {
     ref: canvasRef,
     id: "canvas"
-  }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_PdfReader.default, {
-    fileReaderInfo: fileReaderInfo,
-    updateFileReaderInfo: updateFileReaderInfo
   })));
 };
 
-var _default = Whiteboard;
-exports.default = _default;
+exports.Whiteboard = Whiteboard;

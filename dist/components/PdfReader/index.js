@@ -11,7 +11,7 @@ var _entry = require("react-pdf/dist/esm/entry.webpack");
 
 var _reactPdf = require("react-pdf");
 
-var _indexModule = _interopRequireDefault(require("./index.module.scss"));
+var _indexModule = _interopRequireDefault(require("../WhiteBoard/index.module.scss"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53,7 +53,9 @@ const PDFReader = _ref => {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: _indexModule.default.pdfReader
   }, /*#__PURE__*/_react.default.createElement("div", {
-    className: _indexModule.default.fileContainer
+    style: {
+      display: 'none'
+    }
   }, /*#__PURE__*/_react.default.createElement(_entry.Document, {
     className: _indexModule.default.document,
     file: fileReaderInfo.file,
@@ -70,12 +72,18 @@ const PDFReader = _ref => {
     onRenderSuccess: onRenderSuccess,
     pageNumber: fileReaderInfo.currentPageNumber
   }))), /*#__PURE__*/_react.default.createElement("div", {
-    className: _indexModule.default.pageInfo
+    className: _indexModule.default.pageInfo,
+    style: {
+      display: 'flex',
+      alignItems: 'center'
+    }
   }, /*#__PURE__*/_react.default.createElement("span", null, "Page ", fileReaderInfo.currentPageNumber, " of ", fileReaderInfo.totalPages || '--'), /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.whiteboardButton,
     type: "button",
     disabled: fileReaderInfo.currentPageNumber <= 1,
     onClick: previousPage
   }, "Previous"), /*#__PURE__*/_react.default.createElement("button", {
+    className: _indexModule.default.whiteboardButton,
     type: "button",
     disabled: fileReaderInfo.currentPageNumber >= fileReaderInfo.totalPages,
     onClick: nextPage
