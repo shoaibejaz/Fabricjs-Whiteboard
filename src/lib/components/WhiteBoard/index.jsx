@@ -1,21 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
+//          Importing CSS Files
+import styles from './index.module.scss';
+//          Importing Icons
+import { 
+  HiChevronDoubleRight, HiChevronDoubleLeft, GiArrowCursor, MdModeEditOutline, FaShapes, MdClear, SiWritedotas, FaEraser, IoDocument 
+} from "react-icons/all";
+//          Importing Components
 import { fabric } from 'fabric';
+import { Tooltip } from '@material-ui/core';
 import PdfReader from '../PdfReader';
 import { saveAs } from 'file-saver';
 import getCursor from './cursors';
-import SelectIcon from './images/select.svg';
-import EraserIcon from './images/eraser.svg';
-import TextIcon from './images/text.svg';
-import RectangleIcon from './images/rectangle.svg';
-import LineIcon from './images/line.svg';
-import EllipseIcon from './images/ellipse.svg';
-import TriangleIcon from './images/triangle.svg';
-import PencilIcon from './images/pencil.svg';
-import DeleteIcon from './images/delete.svg';
 
 import './eraserBrush';
 
-import styles from './index.module.scss';
 
 let drawInstance = null;
 let origX;
@@ -40,14 +38,14 @@ const modes = {
 };
 
 const initCanvas = () => {
-  const canvas = new fabric.Canvas('canvas', { height: 600, width: 800 });
+  const canvas = new fabric.Canvas('canvas', { height: 700, width: 900 });
   fabric.Object.prototype.transparentCorners = false;
   fabric.Object.prototype.cornerStyle = 'circle';
   fabric.Object.prototype.borderColor = '#4447A9';
   fabric.Object.prototype.cornerColor = '#4447A9';
   fabric.Object.prototype.cornerSize = 6;
   fabric.Object.prototype.padding = 10;
-  fabric.Object.prototype.borderDashArray = [5, 5];
+  fabric.Object.prototype.borderDashArray = [ 5, 5 ];
 
   canvas.on('object:added', (e) => {
     e.target.on('mousedown', removeObject(canvas));
@@ -374,7 +372,8 @@ function draw(canvas) {
   }
 }
 
-const Whiteboard = () => {
+export const Whiteboard = () => {
+  const [ toggle, setToggle ] = useState( false );
   const [canvas, setCanvas] = useState(null);
   const [brushWidth, setBrushWidth] = useState(5);
   const [isFill, setIsFill] = useState(false);
@@ -385,6 +384,7 @@ const Whiteboard = () => {
     currentPage: '',
   });
   const canvasRef = useRef(null);
+  const colorPelateRef = useRef(null);
   const uploadImageRef = useRef(null);
   const uploadPdfRef = useRef(null);
 
@@ -457,69 +457,87 @@ const Whiteboard = () => {
   }
 
   return (
-    <div className={styles.whiteboard}>
-      <div className={styles.toolbar}>
-        <button type="button" onClick={() => createLine(canvas)}>
-          <img src={LineIcon} alt="line" />
-        </button>
-        <button type="button" onClick={() => createRect(canvas)}>
-          <img src={RectangleIcon} alt="Rectangle" />
-        </button>
-        <button type="button" onClick={() => createEllipse(canvas)}>
-          <img src={EllipseIcon} alt="Ellipse" />
-        </button>
-        <button type="button" onClick={() => createTriangle(canvas, options)}>
-          <img src={TriangleIcon} alt="Triangle" />
-        </button>
-        <button type="button" onClick={() => draw(canvas)}>
-          <img src={PencilIcon} alt="Pencil" />
-        </button>
-        <button type="button" onClick={() => createText(canvas)}>
-          <img src={TextIcon} alt="Text" />
-        </button>
-        <button type="button" onClick={() => onSelectMode(canvas)}>
-          <img src={SelectIcon} alt="Selection mode" />
-        </button>
-        <button type="button" onClick={() => changeToErasingMode(canvas)}>
-          <img src={EraserIcon} alt="Eraser" />
-        </button>
-        <button type="button" onClick={() => clearCanvas(canvas)}>
-          <img src={DeleteIcon} alt="Delete" />
-        </button>
-        <div>
-          <input type="checkbox" name="fill" id="fill" checked={isFill} onChange={changeFill} />
-          <label htmlFor="fill">fill</label>
-        </div>
-        <div>
-          <input type="color" name="color" id="color" onChange={changeCurrentColor} />
-        </div>
-        <input
-          type="range"
-          min={1}
-          max={20}
-          step={1}
-          value={brushWidth}
-          onChange={changeCurrentWidth}
-        />
-        <div className={styles.uploadDropdown}>
-          <input ref={uploadImageRef} accept="image/*" type="file" onChange={uploadImage} />
-          <input ref={uploadPdfRef} accept=".pdf" type="file" onChange={onFileChange} />
-          <button className={styles.dropdownButton}>+Upload</button>
-          <div className={styles.dropdownContent}>
-            <span onClick={() => uploadImageRef.current.click()}>Image</span>
-            <span onClick={() => uploadPdfRef.current.click()}>PDF</span>
-          </div>
-        </div>
-
-        <button onClick={() => canvasToJson(canvas)}>To Json</button>
-        <button onClick={onSaveCanvasAsImage}>Save as image</button>
+    <>
+      <div className={ styles.container }>
+        { toggle === false ?
+          <div className={ styles.closeContainer }>
+            <Tooltip title='Open Menu' placement='bottom'>
+              <button className={ `${ styles.button } ${ styles.closeButton }` } onClick={ () => { setToggle( true ) } }>
+                <HiChevronDoubleRight className={ styles.icon } />
+              </button>
+            </Tooltip>
+          </div> : 
+          <div className={ styles.openContainer }>
+            <Tooltip title='Close Menu' placement='right'>
+              <button className={ `${ styles.button } ${ styles.openButton }` } onClick={ () => { setToggle( false ) } }>
+                <HiChevronDoubleLeft className={ styles.icon } />
+              </button>
+            </Tooltip>
+            <Tooltip title='Cursor' placement='right'>
+              <button className={ styles.button } onClick={ () => onSelectMode( canvas ) }>
+                <GiArrowCursor className={ styles.icon } />
+              </button>
+            </Tooltip>
+            <Tooltip title='Pencil' placement='right'>
+              <button className={ styles.button } onClick={ () => draw( canvas ) }>
+                <MdModeEditOutline className={ styles.icon } />
+              </button>
+            </Tooltip>
+            <Tooltip title='Pencil Color' placement='right'>
+              <button className={ styles.button } onClick={ () => colorPelateRef.current.click() }>
+                <input ref={ colorPelateRef } style={ { width: '25px', height: '25px', border: 'none', backgroundColor: 'transparent', borderRadius: '12px' } } type="color" name="color" id="color" onChange={ changeCurrentColor } />
+              </button>
+            </Tooltip>
+            <Tooltip title='Shapes' placement='bottom'>
+              <div className={ styles.uploadDropdown }>
+                <button className={ styles.button }>
+                  <FaShapes className={ styles.icon } />
+                </button>
+                <div className={ styles.dropdownContent }>
+                  <span onClick={ () => createLine( canvas ) }>Line</span>
+                  <span onClick={ () => createRect( canvas ) }>Rectangle</span>
+                  <span onClick={ () => createEllipse( canvas ) }>Ellipse</span>
+                  <span onClick={ () => createTriangle( canvas ) }>Triangle</span>
+                </div>
+              </div>
+            </Tooltip>
+            <Tooltip title='Write' placement='right'>
+              <button className={ styles.button } onClick={ () => createText( canvas ) }>
+                <SiWritedotas className={ styles.icon } />
+              </button>
+            </Tooltip>
+            <Tooltip title='Erase' placement='bottom'>
+              <div className={ styles.uploadDropdown }>
+                <button className={ styles.button }>
+                  <FaEraser className={ styles.icon } />
+                </button>
+                <div className={ styles.dropdownContent }>
+                  <span onClick={ () => changeToErasingMode( canvas ) }>Erase</span>
+                  <span onClick={ () => clearCanvas( canvas ) }>Clear All</span>
+                </div>
+              </div>
+            </Tooltip>
+            <Tooltip title='Document' placement='bottom'>
+              <div className={ styles.uploadDropdown }>
+                <input ref={ uploadImageRef } accept="image/*" type="file" onChange={ uploadImage } />
+                <input ref={ uploadPdfRef } accept=".pdf" type="file" onChange={ onFileChange } />
+                <button className={ styles.button } onClick={ () => uploadImageRef.current.click() }>
+                  <IoDocument className={ styles.icon } />
+                </button>
+                {/* <div className={ styles.dropdownContent }>
+                  <span onClick={ () => uploadImageRef.current.click() }>Image</span>
+                  <span onClick={ () => uploadPdfRef.current.click() }>PDF</span>
+                </div> */}
+              </div>
+            </Tooltip>
+          </div> }
       </div>
-      <canvas ref={canvasRef} id="canvas" />
-      <div>
-        <PdfReader fileReaderInfo={fileReaderInfo} updateFileReaderInfo={updateFileReaderInfo} />
+      <div className={ styles.whiteboard }>
+        <canvas ref={ canvasRef } id="canvas" />
+        {/* <div>
+          <PdfReader fileReaderInfo={ fileReaderInfo } updateFileReaderInfo={ updateFileReaderInfo } />
+        </div> */}
       </div>
-    </div>
+    </>
   );
 };
-
-export default Whiteboard;

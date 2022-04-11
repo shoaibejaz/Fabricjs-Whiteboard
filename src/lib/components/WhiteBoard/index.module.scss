@@ -1,3 +1,69 @@
+.container {
+  position: absolute;
+  top: 25%;
+  z-index: 3;
+}
+.closeContainer {
+  width: 70px;
+  height: 60px;
+  background-color: #FF6C0B;
+  border-radius: 0 35px 35px 0;
+  position: relative;
+}
+.openContainer {
+  margin-left: 10px;
+  width: 60px;
+  height: auto;
+  border-radius: 30px;
+  box-sizing: border-box;
+  padding: 5px;
+  box-shadow: 0 0 5px rgba( 0, 0, 0, 0.2 );
+  background-color: #FFFFFF;
+}
+.button {
+  width: 50px;
+  height: 50px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  position: relative;
+  cursor: pointer;
+}
+.closeButton {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+}
+.openButton {
+  box-shadow: 0 0 5px rgba( 0, 0, 0, 0.2 );
+  border: none;
+}
+.icon {
+  width: 25px;
+  height: 25px;
+  color: #707070;
+}
+.count {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #FF6C0B;
+  font-size: 9px;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -3px;
+  right: 0px;
+}
+
 .whiteboard {
   display: flex;
   flex-direction: column;
@@ -32,10 +98,10 @@ canvas {
   border-radius: 3px;
 }
 
-:global(button) {
+.whiteboardButton {
   padding: 12px;
   margin: 1px;
-  background-color: #7b7de0;
+  background-color: #FF6C0B;
   border-radius: 3px;
   color: #fff;
   border: none;
@@ -43,12 +109,12 @@ canvas {
   cursor: pointer;
 
   &:hover {
-    background-color: #7173ee;
+    background-color: #FF6C0B;
   }
 }
 
 .dropdownButton {
-  background-color: #7b7de0;
+  background-color: #FF6C0B;
   color: white;
   padding: 11px 14px;
   font-size: 14px;
@@ -58,7 +124,6 @@ canvas {
 .uploadDropdown {
   position: relative;
   display: inline-block;
-
   input {
     display: none;
   }
@@ -67,6 +132,8 @@ canvas {
 .dropdownContent {
   display: none;
   position: absolute;
+  left: 50px;
+  top: 0px;
   background-color: #f1f1f1;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -89,5 +156,5 @@ canvas {
 }
 
 .uploadDropdown:hover .dropdownButton {
-  background-color: #7173ee;
+  background-color: #FF6C0B;
 }

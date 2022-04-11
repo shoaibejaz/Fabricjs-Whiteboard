@@ -1,7 +1,7 @@
 import React from 'react';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import { pdfjs } from 'react-pdf';
-import styles from './index.module.scss';
+import styles from '../WhiteBoard/index.module.scss';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -26,13 +26,11 @@ const PDFReader = ({ fileReaderInfo, updateFileReaderInfo }) => {
 
   return (
     <div className={styles.pdfReader}>
-      <div className={styles.fileContainer}>
-        <Document
-          className={styles.document}
-          file={fileReaderInfo.file}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadProgress={({ loaded, total }) =>
-            console.log('Loading a document: ' + (loaded / total) * 100 + '%')
+      <div style={ { display: 'none' } }>
+        <Document className={ styles.document } file={ fileReaderInfo.file }
+          onLoadSuccess={ onDocumentLoadSuccess }
+          onLoadProgress={ ( { loaded, total } ) =>
+            console.log( 'Loading a document: ' + (loaded / total) * 100 + '%' )
           }
         >
           <Page
@@ -42,11 +40,12 @@ const PDFReader = ({ fileReaderInfo, updateFileReaderInfo }) => {
           />
         </Document>
       </div>
-      <div className={styles.pageInfo}>
+      <div className={styles.pageInfo} style={ { display: 'flex', alignItems: 'center' } }>
         <span>
           Page {fileReaderInfo.currentPageNumber} of {fileReaderInfo.totalPages || '--'}
         </span>
         <button
+          className={ styles.whiteboardButton }
           type="button"
           disabled={fileReaderInfo.currentPageNumber <= 1}
           onClick={previousPage}
@@ -54,6 +53,7 @@ const PDFReader = ({ fileReaderInfo, updateFileReaderInfo }) => {
           Previous
         </button>
         <button
+          className={ styles.whiteboardButton }
           type="button"
           disabled={fileReaderInfo.currentPageNumber >= fileReaderInfo.totalPages}
           onClick={nextPage}

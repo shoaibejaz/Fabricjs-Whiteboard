@@ -1,13 +1,8 @@
 import React from 'react';
-import Home from './views/Home';
-import styles from './app.module.scss';
+import { Whiteboard } from './lib/components/WhiteBoard';
 
 const App = () => {
-  return (
-    <div className={styles.app}>
-      <Home />
-    </div>
-  );
+  return <Whiteboard />;
 };
 
 export default App;

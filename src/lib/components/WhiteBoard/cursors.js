@@ -1,7 +1,7 @@
 import removeCursor from './images/remove.svg';
 
-const getCursor = ({ type }) => {
-  switch (type) {
+const getCursor = ( { type } ) => {
+  switch ( type ) {
     case 'eraser': {
       return removeCursor;
     }
